@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Academy-2025.props" />
+</Project>
