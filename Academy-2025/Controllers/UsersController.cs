@@ -1,4 +1,5 @@
 ﻿using Academy_2025.Data;
+using Academy_2025.Respositories;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -9,28 +10,27 @@ namespace Academy_2025.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        public static List<User>? Users = new List<User>();
+        private readonly UserRepository _repository;
+
+        public UsersController()
+        {
+            _repository = new UserRepository();
+        }
 
         // GET: api/<UsersController>
         [HttpGet]
         public IEnumerable<User> Get()
         {
-            return Users;
+            return _repository.GetAll();
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
         public ActionResult<User> Get(int id)
         {
-            foreach (var user in Users)
-            {
-                if (user.Id == id)
-                {
-                    return Ok(user);
-                }
-            }
+            var user = _repository.GetById(id);
 
-            return NotFound();
+            return user == null ? NotFound() : user;
         }
 
         // POST api/<UsersController>
@@ -42,7 +42,7 @@ namespace Academy_2025.Controllers
                 return BadRequest(ModelState);
             }
 
-            Users.Add(data);
+            _repository.Create(data);
 
             return NoContent();
         }
@@ -51,35 +51,18 @@ namespace Academy_2025.Controllers
         [HttpPut("{id}")]
         public ActionResult Put(int id, [FromBody] User data)
         {
-            foreach (var user in Users)
-            {
-                if (user.Id == id)
-                {
-                    user.FirstName = data.FirstName;
-                    user.LastName = data.LastName;
+            var user = _repository.Update(id, data);
 
-                    return NoContent();
-                }
-            }
-
-            return NotFound();
+            return user == null ? NotFound() : NoContent();
         }
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
         public ActionResult Delete(int id)
         {
-            foreach (var user in Users)
-            {
-                if (user.Id == id)
-                {
-                    Users.Remove(user);
+            var result = _repository.Delete(id);
 
-                    return NoContent();
-                }
-            }
-
-            return NotFound();
+            return result ? NoContent() : NotFound();
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Academy_2025.Data
 {
     public class User
     {
+        [Key]
         public int Id { get; set; }
 
         [Required]
