@@ -28,20 +28,8 @@ namespace Academy_2025.Respositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<User?> UpdateAsync(int id, User data)
-        {
-            var user = await _context.Users.FirstOrDefaultAsync(user => user.Id == id);
-            if (user != null)
-            {
-                user.FirstName = data.FirstName;
-                user.LastName = data.LastName;
-                await _context.SaveChangesAsync();
-
-                return user;
-            }
-
-            return null;
-        }
+        public Task<int> UpdateAsync()
+            => _context.SaveChangesAsync();
 
         public async Task<bool> DeleteAsync(int id)
         {
@@ -56,5 +44,8 @@ namespace Academy_2025.Respositories
 
             return false;
         }
+
+        public Task<User?> GetByEmailAsync(string email)
+            => _context.Users.FirstOrDefaultAsync(user => user.Email == email);
     }
 }

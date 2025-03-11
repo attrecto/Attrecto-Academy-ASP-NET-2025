@@ -8,6 +8,7 @@ namespace Academy_2025.Respositories
         Task<bool> DeleteAsync(int id);
         Task<List<User>> GetAllAsync();
         Task<User?> GetByIdAsync(int id);
-        Task<User?> UpdateAsync(int id, User data);
+        Task<User?> GetByEmailAsync(string email);
+        Task<int> UpdateAsync();
     }
 }
